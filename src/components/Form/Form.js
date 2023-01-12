@@ -46,7 +46,6 @@ const Form = ({ currentId, setCurrentId }) => {
     <Paper sx={{ padding: "20px" }}>
       <ValidatorForm
         autoComplete="off"
-        noValidate
         sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         onSubmit={handleSubmit}
       >
@@ -58,30 +57,29 @@ const Form = ({ currentId, setCurrentId }) => {
           name="creator"
           variant="outlined"
           label="Creator"
+          required
           fullWidth
           value={postData.creator}
           onChange={(e) =>
             setPostData({ ...postData, creator: e.target.value })
           }
-          validators={["required"]}
-          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px", marginTop: "15px" }}
         />
         <TextValidator
           name="title"
           variant="outlined"
           label="Title"
+          required
           fullWidth
           value={postData.title}
           onChange={(e) => setPostData({ ...postData, title: e.target.value })}
-          validators={["required"]}
-          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px" }}
         />
         <TextValidator
           name="message"
           variant="outlined"
           label="Message"
+          required
           fullWidth
           value={postData.message}
           onChange={(e) =>
@@ -100,8 +98,6 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(e) =>
             setPostData({ ...postData, tags: e.target.value.split(",") })
           }
-          validators={["required"]}
-          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px" }}
         />
         <div
@@ -112,6 +108,7 @@ const Form = ({ currentId, setCurrentId }) => {
         >
           <FileBase
             type="file"
+            required={true}
             multiple={false}
             onDone={({ base64 }) =>
               setPostData({ ...postData, selectedFile: base64 })
