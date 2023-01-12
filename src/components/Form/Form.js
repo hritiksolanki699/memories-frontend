@@ -65,7 +65,7 @@ const Form = ({ currentId, setCurrentId }) => {
           }
           validators={["required"]}
           errorMessages={["this field is required"]}
-          sx={{ paddingBottom: "10px", paddingTop: "10px" }}
+          sx={{ paddingBottom: "10px", marginTop: "15px" }}
         />
         <TextValidator
           name="title"
@@ -117,27 +117,27 @@ const Form = ({ currentId, setCurrentId }) => {
               setPostData({ ...postData, selectedFile: base64 })
             }
           />
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            type="submit"
-            fullWidth
-            sx={{ marginBottom: "10px", marginTop: "10px" }}
-          >
-            Submit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={clear}
-            fullWidth
-            sx={{ marginTop: "10px" }}
-          >
-            Clear
-          </Button>
         </div>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          type="submit"
+          fullWidth
+          sx={{ marginBottom: "10px", marginTop: "10px" }}
+        >
+          Submit
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          onClick={clear}
+          fullWidth
+          sx={{ marginTop: "10px" }}
+        >
+          Clear
+        </Button>
       </ValidatorForm>
     </Paper>
   );
