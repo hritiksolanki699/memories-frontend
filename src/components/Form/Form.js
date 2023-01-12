@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Typography, Paper } from "@mui/material";
+import { Button, Typography, Paper } from "@mui/material";
 import FileBase from "react-file-base64";
 import { useDispatch } from "react-redux";
 import { createPost, updatePost } from "../../actions/posts";
 import { useSelector } from "react-redux";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
@@ -29,7 +30,7 @@ const Form = ({ currentId, setCurrentId }) => {
     } else {
       dispatch(createPost(postData));
     }
-    clear()
+    clear();
   };
   const clear = () => {
     setCurrentId(null);
@@ -43,17 +44,17 @@ const Form = ({ currentId, setCurrentId }) => {
   };
   return (
     <Paper sx={{ padding: "20px" }}>
-      <form
+      <ValidatorForm
         autoComplete="off"
         noValidate
-        style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+        sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
           {" "}
           {currentId ? "Editing" : "Creating"} a Memory
         </Typography>
-        <TextField
+        <TextValidator
           name="creator"
           variant="outlined"
           label="Creator"
@@ -62,18 +63,22 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(e) =>
             setPostData({ ...postData, creator: e.target.value })
           }
+          validators={["required"]}
+          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px", paddingTop: "10px" }}
         />
-        <TextField
+        <TextValidator
           name="title"
           variant="outlined"
           label="Title"
           fullWidth
           value={postData.title}
           onChange={(e) => setPostData({ ...postData, title: e.target.value })}
+          validators={["required"]}
+          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px" }}
         />
-        <TextField
+        <TextValidator
           name="message"
           variant="outlined"
           label="Message"
@@ -82,15 +87,21 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(e) =>
             setPostData({ ...postData, message: e.target.value })
           }
+          validators={["required"]}
+          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px" }}
         />
-        <TextField
+        <TextValidator
           name="tags"
           variant="outlined"
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })}
+          onChange={(e) =>
+            setPostData({ ...postData, tags: e.target.value.split(",") })
+          }
+          validators={["required"]}
+          errorMessages={["this field is required"]}
           sx={{ paddingBottom: "10px" }}
         />
         <div
@@ -127,7 +138,7 @@ const Form = ({ currentId, setCurrentId }) => {
             Clear
           </Button>
         </div>
-      </form>
+      </ValidatorForm>
     </Paper>
   );
 };

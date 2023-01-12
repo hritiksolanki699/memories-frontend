@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// const url = "https://memories-backend-seven.vercel.app/posts";
+
 const url = "http://localhost:5000/posts" || "https://memories-backend-seven.vercel.app/posts";
 
 export const fetchPosts = () => axios.get(url);
