@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Avatar,
@@ -7,11 +8,35 @@ import {
   Typography,
 } from "@mui/material";
 import memories from "../../images/memories.png";
-import { Link } from "react-router-dom";
+import decode from  'jwt-decode'
+import { Link, useNavigate, useLocation  } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import * as actionType from "../../constants/actionTypes";
 
 const Navbar = () => {
-  const user = null;
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  const history = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  // console.log(user, "user");
+  const logout = () => {
+    dispatch({ type: actionType.LOGOUT });
 
+    history("/auth");
+
+    setUser(null);
+  };
+  useEffect(() => {
+    const token = user?.token;
+
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (token.exp * 1000 < new Date().getTime()) logout();
+    }
+
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
   return (
     <AppBar
       position="static"
@@ -61,16 +86,16 @@ const Navbar = () => {
               width: "400px",
             }}
           >
-            <Avatar sx={{}} alt="" src="">
-              user
+            <Avatar sx={{background:"#9c27b0"}} alt={user?.result.name} src={user?.result.picture}>
+              {user?.result.name.charAt(0)}
             </Avatar>
             <Typography
               sx={{ display: "flex", alignItems: "center" }}
               variant="h6"
             >
-              userName
+              {user?.result?.name}
             </Typography>
-            <Button variant="contained" color="secondary">
+            <Button variant="contained" color="secondary" onClick={logout}>
               Logout
             </Button>
           </Container>

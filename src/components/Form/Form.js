@@ -7,11 +7,11 @@ import { useSelector } from "react-redux";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 const Form = ({ currentId, setCurrentId }) => {
+  const user = JSON.parse(localStorage.getItem("profile"));
   const post = useSelector((state) =>
     currentId ? state.posts.find((p) => p._id === currentId) : null
   );
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
@@ -23,25 +23,43 @@ const Form = ({ currentId, setCurrentId }) => {
     if (post) setPostData(post);
   }, [post]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (currentId) {
-      dispatch(updatePost(currentId, postData));
-    } else {
-      dispatch(createPost(postData));
-    }
-    clear();
-  };
   const clear = () => {
-    setCurrentId(null);
+    setCurrentId(0);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
     });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (currentId === 0) {
+      dispatch(
+        createPost({
+          ...postData,
+          name: user?.result?.name,
+          creator: user?.result?._id,
+        })
+      );
+    } else {
+      dispatch(updatePost({ ...postData, name: user?.result?.name }));
+    }
+    clear();
+  };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper sx={{ padding: "20px" }}>
+        <Typography variant="h6" align="center">
+          Please Sign In to create your own memories and like other's memories.
+        </Typography>
+      </Paper>
+    );
+  }
+
   return (
     <Paper sx={{ padding: "20px" }}>
       <ValidatorForm
@@ -54,18 +72,6 @@ const Form = ({ currentId, setCurrentId }) => {
           {currentId ? "Editing" : "Creating"} a Memory
         </Typography>
         <TextValidator
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          required
-          fullWidth
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-          sx={{ paddingBottom: "10px", marginTop: "15px" }}
-        />
-        <TextValidator
           name="title"
           variant="outlined"
           label="Title"
@@ -76,6 +82,8 @@ const Form = ({ currentId, setCurrentId }) => {
           sx={{ paddingBottom: "10px" }}
         />
         <TextValidator
+          multiline
+          rows={3}
           name="message"
           variant="outlined"
           label="Message"

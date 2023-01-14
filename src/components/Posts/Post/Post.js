@@ -11,12 +11,43 @@ import moment from "moment";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from "react-redux";
 
 import { deletePost, likePost } from "../../../actions/posts";
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+
+  console.log(post,  "post")
+
+  const Likes = () => {
+    if (post.likes.length > 0) {
+      return post.likes.find(
+        (like) => like === (user?.result?.sub || user?.result?._id)
+      ) ? (
+        <>
+          <ThumbUpIcon fontSize="small" />
+          &nbsp;
+          {post.likes.length > 2
+            ? `You and ${post.likes.length - 1} others`
+            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+        </>
+      ) : (
+        <>
+          <ThumbUpIcon fontSize="small" />
+          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ThumbUpIcon fontSize="small" />
+        &nbsp;Like
+      </>
+    );
+  };
 
   return (
     <Card
@@ -36,8 +67,8 @@ const Post = ({ post, setCurrentId }) => {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           backgroundBlendMode: "darken",
         }}
-        image={post.selectedFile}
-        title={post.title}
+        image={post?.selectedFile}
+        title={post?.title}
       />
       <div
         style={{
@@ -47,8 +78,10 @@ const Post = ({ post, setCurrentId }) => {
           color: "white",
         }}
       >
-        <Typography variant="h6">{post.creator}</Typography>
-        <Typography variant="h6">{moment(post.createdAt).fromNow()}</Typography>
+        <Typography variant="h6">{post?.name}</Typography>
+        <Typography variant="h6">
+          {moment(post?.createdAt).fromNow()}
+        </Typography>
       </div>
       <div
         style={{
@@ -61,7 +94,7 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           sx={{ color: "white" }}
           size="small"
-          onClick={() => setCurrentId(post._id)}
+          onClick={() => setCurrentId(post?._id)}
         >
           <MoreHorizIcon />
         </Button>
@@ -74,7 +107,7 @@ const Post = ({ post, setCurrentId }) => {
         }}
       >
         <Typography variant="body2" color="textSecondary">
-          {post.tags.map((tag) => `#${tag} `)}
+          {post?.tags.map((tag) => `#${tag} `)}
         </Typography>
       </div>
       <Typography
@@ -83,16 +116,16 @@ const Post = ({ post, setCurrentId }) => {
         color="textSecondary"
         gutterBottom
       >
-        {post.title}
+        {post?.title}
       </Typography>
       <CardContent>
         <Typography
           variant="body2"
           color="textSecondary"
-          component='p'
+          component="p"
           gutterBottom
         >
-          {post.message}
+          {post?.message}
         </Typography>
       </CardContent>
       <CardActions
@@ -102,14 +135,26 @@ const Post = ({ post, setCurrentId }) => {
           justifyContent: "space-between",
         }}
       >
-        <Button size="small" color="primary" onClick={() => dispatch(likePost(post._id))}>
-          <ThumbUpIcon fontSize="small" />&nbsp;
-          Like&nbsp;{post.likeCount}
+        <Button
+          size="small"
+          color="primary"
+          disabled={!user?.result}
+          onClick={() => dispatch(likePost(post?._id))}
+        >
+          <Likes />
         </Button>
-        <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
-          <DeleteIcon fontSize="small" />
-          Delete
-        </Button>
+
+        {(user?.result?.sub === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => dispatch(deletePost(post?._id))}
+          >
+            <DeleteIcon fontSize="small" />
+            Delete
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
