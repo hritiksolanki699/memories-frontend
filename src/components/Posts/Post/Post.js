@@ -19,17 +19,17 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
 
-  console.log(post,  "post")
+  // console.log(post?.creator,  "post")
 
   const Likes = () => {
-    if (post.likes.length > 0) {
+    if (post?.likes?.length > 0) {
       return post.likes.find(
         (like) => like === (user?.result?.sub || user?.result?._id)
       ) ? (
         <>
           <ThumbUpIcon fontSize="small" />
           &nbsp;
-          {post.likes.length > 2
+          {post?.likes.length > 2
             ? `You and ${post.likes.length - 1} others`
             : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
         </>
@@ -83,22 +83,26 @@ const Post = ({ post, setCurrentId }) => {
           {moment(post?.createdAt).fromNow()}
         </Typography>
       </div>
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          color: "white",
-        }}
-      >
-        <Button
-          sx={{ color: "white" }}
-          size="small"
-          onClick={() => setCurrentId(post?._id)}
+
+      {(user?.result?.googleId === post?.creator ||
+        user?.result?._id === post?.creator) && (
+        <div
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            color: "white",
+          }}
         >
-          <MoreHorizIcon />
-        </Button>
-      </div>
+          <Button
+            sx={{ color: "white" }}
+            size="small"
+            onClick={() => setCurrentId(post?._id)}
+          >
+            <MoreHorizIcon />
+          </Button>
+        </div>
+      )}
       <div
         style={{
           display: "flex",
