@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// const url = "https://memories-backend-seven.vercel.app";
+const url = "https://memories-backend-seven.vercel.app";
 
-const url =
-  "http://localhost:5000" || "https://memories-backend-seven.vercel.app";
+// const url =
+//   "http://localhost:5000" || "https://memories-backend-seven.vercel.app";
 
 const API = axios.create({ baseURL: url });
 
