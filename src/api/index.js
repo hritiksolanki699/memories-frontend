@@ -7,7 +7,7 @@ const url = "https://memories-backend-seven.vercel.app";
 
 const API = axios.create({ baseURL: url });
 
-API.interceptors.request.use((req) => {
+API.interceptors.request.use((req) => {git 
   if (localStorage.getItem("profile")) {
     req.headers.authorization = `Bearer ${
       JSON.parse(localStorage.getItem("profile")).token

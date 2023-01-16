@@ -58,7 +58,6 @@ const Auth = () => {
     const result = res?.data;
     const token = res?.data?.access_token;
     try {
-      // console.log(result,token );
       dispatch({ type: AUTH, data: { result, token } });
       history("/");
     } catch (error) {

@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import memories from "../../images/memories.png";
-import decode from  'jwt-decode'
-import { Link, useNavigate, useLocation  } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actionType from "../../constants/actionTypes";
 
@@ -25,17 +25,20 @@ const Navbar = () => {
 
     setUser(null);
   };
+
   useEffect(() => {
     const token = user?.token;
+    if (user?.expires_in) {
+      if (token) {
+        const decodedToken = jwt_decode(token);
 
-    if (token) {
-      const decodedToken = decode(token);
-
-      if (token.exp * 1000 < new Date().getTime()) logout();
+        if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+      }
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
+
   return (
     <AppBar
       position="static"
@@ -77,7 +80,7 @@ const Navbar = () => {
       <Toolbar
         sx={{ display: "flex", justifyContent: "flex-end", width: "400px" }}
       >
-        {user ? (
+        {user?.result ? (
           <Container
             sx={{
               display: "flex",
@@ -85,7 +88,11 @@ const Navbar = () => {
               width: "400px",
             }}
           >
-            <Avatar sx={{background:"#9c27b0"}} alt={user?.result.name} src={user?.result.picture}>
+            <Avatar
+              sx={{ background: "#9c27b0" }}
+              alt={user?.result.name}
+              src={user?.result.picture}
+            >
               {user?.result.name.charAt(0)}
             </Avatar>
             <Typography
