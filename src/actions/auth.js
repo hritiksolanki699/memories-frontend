@@ -10,7 +10,8 @@ export const signIn = (formData, history) => async (dispatch) => {
 
     history("/");
   } catch (error) {
-    console.log(error);
+    alert(error.response.data.message)
+    console.log(error.response.data.message);
   }
 };
 
@@ -20,9 +21,10 @@ export const signUp = (formData, history) => async (dispatch) => {
     const { data } = await api.signUp(formData);
 
     dispatch({ type: AUTH, data });
-    
+
     history("/");
   } catch (error) {
+    alert(error.response.data.message)
     console.log(error);
   }
 };
