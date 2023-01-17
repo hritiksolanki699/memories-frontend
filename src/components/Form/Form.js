@@ -41,7 +41,7 @@ const Form = ({ currentId, setCurrentId }) => {
         createPost({
           ...postData,
           name: user?.result?.name,
-          creator: user?.result?._id,
+          creator: user?.result?._id ? user?.result?._id : user?.result?.sub,
         })
       );
     } else {
@@ -61,7 +61,7 @@ const Form = ({ currentId, setCurrentId }) => {
   }
 
   return (
-    <Paper sx={{ padding: "20px" }}>
+    <Paper sx={{ padding: "20px", borderRadius: 4 }} elevation={5}>
       <ValidatorForm
         autoComplete="off"
         sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}

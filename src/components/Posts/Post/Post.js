@@ -19,7 +19,7 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
 
-  // console.log(post?.creator,  "post")
+  // console.log(user,"post")
 
   const Likes = () => {
     if (post?.likes?.length > 0) {
@@ -59,6 +59,8 @@ const Post = ({ post, setCurrentId }) => {
         height: "100%",
         position: "relative",
       }}
+      raised
+      elevation={6}
     >
       <CardMedia
         sx={{
@@ -129,7 +131,7 @@ const Post = ({ post, setCurrentId }) => {
           component="p"
           gutterBottom
         >
-          {post?.message}
+          {post.message.split(' ').splice(0, 20).join(' ')}...
         </Typography>
       </CardContent>
       <CardActions
@@ -159,6 +161,7 @@ const Post = ({ post, setCurrentId }) => {
             Delete
           </Button>
         )}
+        
       </CardActions>
     </Card>
   );

@@ -7,7 +7,8 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import memories from "../../images/memories.png";
+import memoriesLogo from "../../images/memories-Logo.png";
+import memoriesText from "../../images/memories-Text.png";
 import jwt_decode from "jwt-decode";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -58,24 +59,16 @@ const Navbar = () => {
           alignItems: "center",
         }}
       >
-        <Typography
-          component={Link}
-          to="/"
-          variant="h4"
-          align="center"
-          sx={{ color: "rgba(0,183,255, 1)", textDecoration: "none" }}
-          className="title"
-        >
-          Memories
-        </Typography>
-        <img
-          src={memories}
-          alt="memories"
-          height="60"
-          width="60"
-          style={{ marginLeft: "12px", padding: "8px 0" }}
-          className="memories"
-        />
+        <Link to="/" style={{ display: "flex", alignItems: "center" }}>
+          <img src={memoriesText} alt="icon" height="40" />
+          <img
+            src={memoriesLogo}
+            alt="memories"
+            height="40"
+            style={{ marginLeft: "12px", padding: "8px 0" }}
+            className="memories"
+          />
+        </Link>
       </Container>
       <Toolbar
         sx={{ display: "flex", justifyContent: "flex-end", width: "400px" }}
