@@ -15,7 +15,6 @@ import { MuiChipsInput } from "mui-chips-input";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import PaginationCompoent from "../Pagination";
-import App from "../../App";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -31,9 +30,9 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([]);
 
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch, currentId]);
+  // useEffect(() => {
+  //   dispatch(getPosts());
+  // }, [dispatch, currentId]);
 
   const searchPost = () => {
     if (search.trim() || tags) {
@@ -104,19 +103,21 @@ const Home = () => {
               </Button>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
-            <Paper
-              sx={{
-                borderRadius: 4,
-                marginTop: "1rem",
-                padding: "16px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              elevation={5}
-            >
-              <PaginationCompoent />
-            </Paper>
+            {!searchQuery && !tags.length && (
+              <Paper
+                sx={{
+                  borderRadius: 4,
+                  marginTop: "1rem",
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                elevation={5}
+              >
+                <PaginationCompoent page={page} />
+              </Paper>
+            )}
           </Grid>
         </Grid>
       </Container>

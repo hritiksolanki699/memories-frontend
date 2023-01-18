@@ -5,12 +5,15 @@ import { useDispatch } from "react-redux";
 import { createPost, updatePost } from "../../actions/posts";
 import { useSelector } from "react-redux";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import { useNavigate } from 'react-router-dom'
 
 const Form = ({ currentId, setCurrentId }) => {
+  const history = useNavigate()
   const user = JSON.parse(localStorage.getItem("profile"));
   const post = useSelector((state) =>
-    currentId ? state.posts.find((p) => p._id === currentId) : null
+    currentId ? state.posts.posts.find((p) => p._id === currentId) : null
   );
+
   const [postData, setPostData] = useState({
     title: "",
     message: "",
@@ -42,7 +45,7 @@ const Form = ({ currentId, setCurrentId }) => {
           ...postData,
           name: user?.result?.name,
           creator: user?.result?._id ? user?.result?._id : user?.result?.sub,
-        })
+        }, history)
       );
     } else {
       dispatch(updatePost({ ...postData, name: user?.result?.name }));
@@ -67,7 +70,7 @@ const Form = ({ currentId, setCurrentId }) => {
         sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">
+        <Typography variant="h6" sx={{textAlign:"center", paddingBottom:"8px"}}>
           {" "}
           {currentId ? "Editing" : "Creating"} a Memory
         </Typography>

@@ -6,20 +6,26 @@ import {
   CardMedia,
   Button,
   Typography,
+  ButtonBase,
 } from "@mui/material";
 import moment from "moment";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useDispatch } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 import { deletePost, likePost } from "../../../actions/posts";
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
+  const history = useNavigate();
   const user = JSON.parse(localStorage.getItem("profile"));
 
   // console.log(user,"post")
+
+  const openPost = () => {
+    history(`/posts/${post._id}`);
+  };
 
   const Likes = () => {
     if (post?.likes?.length > 0) {
@@ -62,78 +68,89 @@ const Post = ({ post, setCurrentId }) => {
       raised
       elevation={6}
     >
-      <CardMedia
+      <ButtonBase
         sx={{
-          height: 0,
-          paddingTop: "56.25%",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backgroundBlendMode: "darken",
+          display: "block",
+          textAlign: "initial",
         }}
-        image={post?.selectedFile}
-        title={post?.title}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          color: "white",
-        }}
+        onClick={openPost}
       >
-        <Typography variant="h6">{post?.name}</Typography>
-        <Typography variant="h6">
-          {moment(post?.createdAt).fromNow()}
-        </Typography>
-      </div>
-
-      {(user?.result?.googleId === post?.creator ||
-        user?.result?._id === post?.creator) && (
+        <CardMedia
+          sx={{
+            height: 0,
+            paddingTop: "56.25%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundBlendMode: "darken",
+          }}
+          image={post?.selectedFile}
+          title={post?.title}
+        />
         <div
           style={{
             position: "absolute",
             top: "20px",
-            right: "20px",
+            left: "20px",
             color: "white",
           }}
         >
-          <Button
-            sx={{ color: "white" }}
-            size="small"
-            onClick={() => setCurrentId(post?._id)}
-          >
-            <MoreHorizIcon />
-          </Button>
+          <Typography variant="h6">{post?.name}</Typography>
+          <Typography variant="h6">
+            {moment(post?.createdAt).fromNow()}
+          </Typography>
         </div>
-      )}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          margin: "20px",
-        }}
-      >
-        <Typography variant="body2" color="textSecondary">
-          {post?.tags.map((tag) => `#${tag} `)}
-        </Typography>
-      </div>
-      <Typography
-        sx={{ padding: "0 16px" }}
-        variant="h5"
-        color="textSecondary"
-        gutterBottom
-      >
-        {post?.title}
-      </Typography>
-      <CardContent>
+
+        {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              color: "white",
+            }}
+          >
+            <Button
+              sx={{ color: "white" }}
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentId(post?._id);
+              }}
+            >
+              <MoreHorizIcon />
+            </Button>
+          </div>
+        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "20px",
+          }}
+        >
+          <Typography variant="body2" color="textSecondary">
+            {post?.tags.map((tag) => `#${tag} `)}
+          </Typography>
+        </div>
         <Typography
-          variant="body2"
+          sx={{ padding: "0 16px" }}
+          variant="h5"
           color="textSecondary"
-          component="p"
           gutterBottom
         >
-          {post.message.split(' ').splice(0, 20).join(' ')}...
+          {post?.title}
         </Typography>
-      </CardContent>
+        <CardContent>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            gutterBottom
+          >
+            {post.message.split(" ").splice(0, 20).join(" ")}...
+          </Typography>
+        </CardContent>
+      </ButtonBase>
       <CardActions
         sx={{
           padding: "0 16px 8px 16px",
@@ -161,7 +178,6 @@ const Post = ({ post, setCurrentId }) => {
             Delete
           </Button>
         )}
-        
       </CardActions>
     </Card>
   );
