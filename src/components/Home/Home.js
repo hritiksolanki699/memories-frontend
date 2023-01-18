@@ -30,9 +30,6 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([]);
 
-  // useEffect(() => {
-  //   dispatch(getPosts());
-  // }, [dispatch, currentId]);
 
   const searchPost = () => {
     if (search.trim() || tags) {
@@ -47,7 +44,7 @@ const Home = () => {
 
   const handleKeyPress = (e) => {
     if (e.keyCode === 13) {
-      //search post
+      searchPost();
     }
   };
 
