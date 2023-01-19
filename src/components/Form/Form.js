@@ -44,7 +44,6 @@ const Form = ({ currentId, setCurrentId }) => {
         createPost({
           ...postData,
           name: user?.result?.name,
-          creator: user?.result?._id ? user?.result?._id : user?.result?.sub,
         }, history)
       );
     } else {
